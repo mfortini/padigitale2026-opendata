@@ -1,0 +1,33 @@
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'data/'
+
+concurrency: 
+  group: ${{ github.ref }}
+
+jobs:
+    compile:
+        name: Setup
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v2
+          - name: Prepare
+            run: |
+              apt install -y xmlstarlet
+          - name: Update dates
+            run: |
+              for i in data/*.{csv,json}; do
+                git log -1 --pretty="format:%ci" "${i}"  | awk '{ print $1 }' 
+                #- name: Tidy up
+                #  run: |
+                #    mkdir ld || true 
+                #    mv -f candidature_scuole_finanziate.ttl ld/
+                #    git config --global --add safe.directory /__w/padigitale2026-opendata/padigitale2026-opendata
+                #- name: Commit
+                #  uses: EndBug/add-and-commit@v9
+                #  with:
+                #    message: 'Candidature Scuole PNRR LD'
+                #    add: 'ld/candidature_scuole_finanziate.ttl'

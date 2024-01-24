@@ -13,8 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Validate data
-        uses: frictionlessdata/repository@v2
+        uses: actions/checkout@v2
         with:
-          packages: datapackage.yaml
+          lfs: true # add this to download LFS files
+          submodules: true # add this to download submodules
+      - name: Validate data
+        uses: frictionlessdata/frictionless-ci@v2
